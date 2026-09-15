@@ -1,6 +1,7 @@
 // HTTP 请求工具类（基于 Axios）
 // @ts-ignore
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { ConfigManager } from './config.js';
 
 export interface HttpRequestOptions extends AxiosRequestConfig {
   // 可以添加自定义配置
@@ -16,16 +17,19 @@ class HttpUtils {
   static {
     // 创建 Axios 实例
     this.axiosInstance = axios.create({
-      timeout: 5000,
+      timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    // 请求拦截器
+    // 请求拦截器：自动注入 X-Api-Key 请求头
     this.axiosInstance.interceptors.request.use(
       (config: any) => {
-        // 可以在请求发送前添加逻辑，比如添加 token
+        const apiKey = ConfigManager.getConfig().API_KEY;
+        if (apiKey) {
+          config.headers['X-Api-Key'] = apiKey;
+        }
         return config;
       },
       (error: any) => {

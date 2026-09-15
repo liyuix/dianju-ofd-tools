@@ -2,7 +2,9 @@
   "name": "dianju-ofd-tools",
   "version": "1.0.0",
   "type": "module",
-  "bin": "./dist/index.js",
+  "bin": {
+    "ofd-tools": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
